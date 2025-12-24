@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import Model.Event;
 import Model.EventData;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -25,7 +26,64 @@ public class AdminDashboard extends javax.swing.JFrame {
      */
     public AdminDashboard() {
         initComponents();
+        loadEvents();
     }
+
+    private void loadEvents() {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
+
+    for (Event e : EventData.eventList) {
+        model.addRow(new Object[]{
+            e.getId(),
+            e.getName(),
+            e.getLocation(),
+            e.getDate(),
+            e.getDeadline()
+        });
+    }
+}
+
+    private void updateEventById() {
+    String id = jTextField2.getText(); // Event ID entered by user
+    String name = jTextField3.getText();
+    String location = jTextField4.getText();
+    String date = jTextField5.getText();
+    String deadline = jTextField6.getText();
+
+    if (id.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter Event ID to update");
+        return;
+    }
+
+    // Find event by ID
+    Event foundEvent = null;
+    for (Event e : EventData.eventList) {
+        if (e.getId().equals(id)) {
+            foundEvent = e;
+            break;
+        }
+    }
+
+    if (foundEvent == null) {
+        JOptionPane.showMessageDialog(this, "Event with ID " + id + " not found");
+        return;
+    }
+
+    // Update fields only if not empty
+    if (!name.isEmpty()) foundEvent.setName(name);
+    if (!location.isEmpty()) foundEvent.setLocation(location);
+    if (!date.isEmpty()) foundEvent.setDate(date);
+    if (!deadline.isEmpty()) foundEvent.setDeadline(deadline);
+
+    // Reload table to show updated data
+    loadEvents();
+
+    JOptionPane.showMessageDialog(this, "Event updated successfully");
+
+    // Optionally clear fields
+    clearFields();
+}
 
   
 
@@ -55,7 +113,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -73,6 +130,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,7 +207,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton11)
                 .addGap(103, 103, 103))
         );
@@ -231,9 +289,11 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jButton9.setBackground(new java.awt.Color(0, 255, 255));
         jButton9.setText("Update Event");
-
-        jButton10.setBackground(new java.awt.Color(0, 255, 255));
-        jButton10.setText("Delete Event");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("ID");
@@ -281,9 +341,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(jButton8)
                 .addGap(105, 105, 105)
                 .addComponent(jButton9)
-                .addGap(110, 110, 110)
-                .addComponent(jButton10)
-                .addGap(56, 56, 56))
+                .addGap(56, 270, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,8 +369,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8)
-                    .addComponent(jButton9)
-                    .addComponent(jButton10))
+                    .addComponent(jButton9))
                 .addGap(144, 144, 144))
         );
 
@@ -348,14 +405,24 @@ public class AdminDashboard extends javax.swing.JFrame {
         jButton7.setBackground(new java.awt.Color(0, 255, 255));
         jButton7.setText("SortByDate");
 
+        jButton10.setBackground(new java.awt.Color(0, 255, 255));
+        jButton10.setText("Delete Event");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(60, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -363,8 +430,12 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)))
-                .addGap(20, 20, 20))
+                        .addComponent(jButton5)
+                        .addGap(20, 20, 20))))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(258, 258, 258)
+                .addComponent(jButton10)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,9 +446,11 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addComponent(jButton5)
                     .addComponent(jButton6)
                     .addComponent(jButton7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(jButton10)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel4, "card2");
@@ -399,7 +472,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap(122, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -467,6 +540,14 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
         javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields");
         return;
     }
+    
+    // Check if Event ID already exists
+    for (Event e : EventData.eventList) {
+        if (e.getId().equals(id)) {
+            JOptionPane.showMessageDialog(this, "Event ID already exists. Please use a unique ID.");
+            return;
+        }
+    }
 
     Event event = new Event(id, name, location, date, deadline);
     EventData.eventList.add(event);
@@ -500,6 +581,28 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
 
        
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+                                           
+    updateEventById();
+
+
+
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+                                         
+    int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select an event to delete");
+        return;
+    }
+
+    EventData.eventList.remove(selectedRow);
+    loadEvents();
+    JOptionPane.showMessageDialog(this, "Event deleted successfully");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * @param args the command line arguments
