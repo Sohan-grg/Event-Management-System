@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package View;
+import Controller.EventController;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -121,6 +122,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
+        jButton10 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -128,7 +130,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -295,6 +296,14 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jTextField6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
+        jButton10.setBackground(new java.awt.Color(0, 255, 255));
+        jButton10.setText("Delete Event");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -320,7 +329,9 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(jButton8)
                 .addGap(105, 105, 105)
                 .addComponent(jButton9)
-                .addGap(56, 270, Short.MAX_VALUE))
+                .addGap(60, 60, 60)
+                .addComponent(jButton10)
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,10 +356,11 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8)
-                    .addComponent(jButton9))
+                    .addComponent(jButton9)
+                    .addComponent(jButton10))
                 .addGap(144, 144, 144))
         );
 
@@ -389,14 +401,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         jButton7.setBackground(new java.awt.Color(0, 255, 255));
         jButton7.setText("SortByDate");
 
-        jButton10.setBackground(new java.awt.Color(0, 255, 255));
-        jButton10.setText("Delete Event");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -416,10 +420,6 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5)
                         .addGap(20, 20, 20))))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(258, 258, 258)
-                .addComponent(jButton10)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,9 +432,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addComponent(jButton7))
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jButton10)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel4, "card2");
@@ -571,6 +569,7 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
 
     addEventToTable(event);
 
+    
     clearFields();
 
     javax.swing.JOptionPane.showMessageDialog(this, "Event Added Successfully");
@@ -599,6 +598,7 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
        
     }//GEN-LAST:event_jButton8ActionPerformed
 
+    
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
                                            
     updateEventById();
@@ -607,54 +607,77 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
 
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-                                         
-    int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Please select an event to delete");
-        return;
-    }
-
-    EventData.eventList.remove(selectedRow);
-    loadEvents();
-    JOptionPane.showMessageDialog(this, "Event deleted successfully");
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-                                         
                                              
+
     String keyword = jTextField1.getText().trim();
-    
+
     if (keyword.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please enter Event ID or Name to search");
         return;
     }
 
-    boolean found = false;
-    StringBuilder eventInfo = new StringBuilder();
+    Event event = EventController.searchEvent(keyword);
 
+    if (event != null) {
+        JOptionPane.showMessageDialog(this,
+            "Event Found!\n\n"
+          + "Event ID: " + event.getId() + "\n"
+          + "Event Name: " + event.getName() + "\n"
+          + "Location: " + event.getLocation() + "\n"
+          + "Event Date: " + event.getDate() + "\n"
+          + "Registration Deadline: " + event.getDeadline(),
+            "Event Details",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    } else {
+        JOptionPane.showMessageDialog(this,
+            "Event not found!",
+            "Search Result",
+            JOptionPane.WARNING_MESSAGE
+        );
+    }
+                                
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+                                         
+    String id = jTextField1.getText().trim(); // Get ID from text field
+
+    if (id.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter Event ID or Valid Event ID to delete");
+        return;
+    }
+
+    // Find event by ID
+    Event foundEvent = null;
     for (Event e : EventData.eventList) {
-        if (e.getId().equalsIgnoreCase(keyword) || e.getName().equalsIgnoreCase(keyword)) {
-            found = true;
-            eventInfo.append("Event ID: ").append(e.getId()).append("\n")
-                     .append("Event Name: ").append(e.getName()).append("\n")
-                     .append("Location: ").append(e.getLocation()).append("\n")
-                     .append("Event Date: ").append(e.getDate()).append("\n")
-                     .append("Registration Deadline: ").append(e.getDeadline()).append("\n");
-            break; // Stop after finding the first match
+        if (e.getId().equalsIgnoreCase(id)) {
+            foundEvent = e;
+            break;
         }
     }
 
-    if (found) {
-        JOptionPane.showMessageDialog(this, eventInfo.toString(), "Event Details", JOptionPane.INFORMATION_MESSAGE);
-    } else {
-        JOptionPane.showMessageDialog(this, "Event not found!", "Search Result", JOptionPane.WARNING_MESSAGE);
+    if (foundEvent == null) {
+        JOptionPane.showMessageDialog(this, "Event with ID " + id + " not found");
+        return;
     }
-                                     
 
+    // Remove from event list
+    EventData.eventList.remove(foundEvent);
+
+    // Log deletion
+  
+
+    // Reload table
+    loadEvents();
+
+    JOptionPane.showMessageDialog(this, "Event deleted successfully");
+
+    // Clear ID field
+    jTextField1.setText("");
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
      * @param args the command line arguments
