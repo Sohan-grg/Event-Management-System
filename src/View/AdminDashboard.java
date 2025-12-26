@@ -642,7 +642,7 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
                                          
-    String id = jTextField1.getText().trim(); // Get ID from text field
+    String id = jTextField2.getText().trim(); // Get ID from text field
 
     if (id.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please enter Event ID or Valid Event ID to delete");
