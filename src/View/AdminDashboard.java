@@ -45,45 +45,13 @@ public class AdminDashboard extends javax.swing.JFrame {
     }
 }
 
-    private void updateEventById() {
-    String id = jTextField2.getText(); // Event ID entered by user
-    String name = jTextField3.getText();
-    String location = jTextField4.getText();
-    String date = jTextField5.getText();
-    String deadline = jTextField6.getText();
-
-    if (id.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter Event ID to update");
-        return;
-    }
-
-    // Find event by ID
-    Event foundEvent = null;
-    for (Event e : EventData.eventList) {
-        if (e.getId().equals(id)) {
-            foundEvent = e;
-            break;
-        }
-    }
-
-    if (foundEvent == null) {
-        JOptionPane.showMessageDialog(this, "Event with ID " + id + " not found");
-        return;
-    }
-
-    // Update fields only if not empty
-    if (!name.isEmpty()) foundEvent.setName(name);
-    if (!location.isEmpty()) foundEvent.setLocation(location);
-    if (!date.isEmpty()) foundEvent.setDate(date);
-    if (!deadline.isEmpty()) foundEvent.setDeadline(deadline);
-
-    // Reload table to show updated data
-    loadEvents();
-
-    JOptionPane.showMessageDialog(this, "Event updated successfully");
-
-    // Optionally clear fields
-    clearFields();
+    private void clearFields() {
+    jTextField1.setText(""); // search
+    jTextField2.setText(""); // event id
+    jTextField3.setText(""); // name
+    jTextField4.setText(""); // location
+    jTextField5.setText(""); // date
+    jTextField6.setText(""); // deadline
 }
 
   
@@ -293,6 +261,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         jTextField4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         jTextField5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
 
         jTextField6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
@@ -552,47 +525,20 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     String deadline = jTextField6.getText();
 
     if (id.isEmpty() || name.isEmpty() || location.isEmpty() || date.isEmpty() || deadline.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Please fill all fields");
+        JOptionPane.showMessageDialog(this, "Please fill all fields");
         return;
-    }
-    
-    // Check if Event ID already exists
-    for (Event e : EventData.eventList) {
-        if (e.getId().equals(id)) {
-            JOptionPane.showMessageDialog(this, "Event ID already exists. Please use a unique ID.");
-            return;
-        }
     }
 
     Event event = new Event(id, name, location, date, deadline);
-    EventData.eventList.add(event);
 
-    addEventToTable(event);
-
-    
-    clearFields();
-
-    javax.swing.JOptionPane.showMessageDialog(this, "Event Added Successfully");
-}
-    
-    private void addEventToTable(Event event) {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
-    model.addRow(new Object[]{
-        event.getId(),
-        event.getName(),
-        event.getLocation(),
-        event.getDate(),
-        event.getDeadline()
-    });
-}
-
-    private void clearFields() {
-    jTextField2.setText("");
-    jTextField3.setText("");
-    jTextField4.setText("");
-    jTextField5.setText("");
-    jTextField6.setText("");
+    if (EventController.addEvent(event)) {
+        loadEvents();
+        clearFields();
+        JOptionPane.showMessageDialog(this, "Event added successfully");
+    } else {
+        JOptionPane.showMessageDialog(this, "Event ID already exists!");
+    }
+  
 
 
        
@@ -601,7 +547,28 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
                                            
-    updateEventById();
+        String id = jTextField2.getText();
+
+    if (id.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Enter Event ID to update");
+        return;
+    }
+
+    boolean updated = EventController.updateEvent(
+        id,
+        jTextField3.getText(),
+        jTextField4.getText(),
+        jTextField5.getText(),
+        jTextField6.getText()
+    );
+
+    if (updated) {
+        loadEvents();
+        clearFields();
+        JOptionPane.showMessageDialog(this, "Event updated successfully");
+    } else {
+        JOptionPane.showMessageDialog(this, "Event not found");
+    }
 
 
 
@@ -609,11 +576,10 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
                                              
-
     String keyword = jTextField1.getText().trim();
 
     if (keyword.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter Event ID or Name to search");
+        JOptionPane.showMessageDialog(this, "Enter Event ID or Name");
         return;
     }
 
@@ -622,62 +588,40 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     if (event != null) {
         JOptionPane.showMessageDialog(this,
             "Event Found!\n\n"
-          + "Event ID: " + event.getId() + "\n"
-          + "Event Name: " + event.getName() + "\n"
-          + "Location: " + event.getLocation() + "\n"
-          + "Event Date: " + event.getDate() + "\n"
-          + "Registration Deadline: " + event.getDeadline(),
-            "Event Details",
-            JOptionPane.INFORMATION_MESSAGE
+            + "ID: " + event.getId() + "\n"
+            + "Name: " + event.getName() + "\n"
+            + "Location: " + event.getLocation() + "\n"
+            + "Date: " + event.getDate() + "\n"
+            + "Deadline: " + event.getDeadline()
         );
     } else {
-        JOptionPane.showMessageDialog(this,
-            "Event not found!",
-            "Search Result",
-            JOptionPane.WARNING_MESSAGE
-        );
+        JOptionPane.showMessageDialog(this, "Event not found");
     }
+
                                 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
                                          
-    String id = jTextField2.getText().trim(); // Get ID from text field
+    String id = jTextField2.getText().trim();
 
     if (id.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter Event ID or Valid Event ID to delete");
+        JOptionPane.showMessageDialog(this, "Enter Event ID to delete");
         return;
     }
 
-    // Find event by ID
-    Event foundEvent = null;
-    for (Event e : EventData.eventList) {
-        if (e.getId().equalsIgnoreCase(id)) {
-            foundEvent = e;
-            break;
-        }
+    if (EventController.deleteEvent(id)) {
+        loadEvents();
+        clearFields();
+        JOptionPane.showMessageDialog(this, "Event deleted successfully");
+    } else {
+        JOptionPane.showMessageDialog(this, "Event not found");
     }
-
-    if (foundEvent == null) {
-        JOptionPane.showMessageDialog(this, "Event with ID " + id + " not found");
-        return;
-    }
-
-    // Remove from event list
-    EventData.eventList.remove(foundEvent);
-
-    // Log deletion
-  
-
-    // Reload table
-    loadEvents();
-
-    JOptionPane.showMessageDialog(this, "Event deleted successfully");
-
-    // Clear ID field
-    jTextField1.setText("");
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
 
     /**
      * @param args the command line arguments
