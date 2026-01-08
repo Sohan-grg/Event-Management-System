@@ -28,6 +28,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     public AdminDashboard() {
         initComponents();
         loadEvents();
+        loadParticipants();
     }
 
     private void loadEvents() {
@@ -44,6 +45,23 @@ public class AdminDashboard extends javax.swing.JFrame {
         });
     }
 }
+    private void loadParticipants() {
+
+    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+    model.setRowCount(0); // clear table
+
+    for (Model.Registration r : Model.RegistrationData.registrationList) {
+        model.addRow(new Object[]{
+            r.getName(),
+            r.getEventId(),
+            r.getEventName(),
+            r.getContact(),
+            r.getEmail(),
+            r.getNoOfPeople()
+        });
+    }
+}
+
 
     private void clearFields() {
     jTextField1.setText(""); // search
@@ -506,6 +524,7 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
     CardLayout cl = (CardLayout) jPanel3.getLayout();
     cl.show(jPanel3, "card4"); // View User
+    loadParticipants();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed

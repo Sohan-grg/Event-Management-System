@@ -5,6 +5,7 @@
 package View;
 
 import Model.Event;
+import Model.Registration;
 import java.awt.CardLayout;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,6 +38,15 @@ private void loadEvents() {
             e.getDeadline()
         });
     }
+}
+
+private void clearRegisterFields() {
+    jTextField2.setText(""); // name
+    jTextField3.setText(""); // event id
+    jTextField4.setText(""); // event name
+    jTextField5.setText(""); // contact
+    jTextField6.setText(""); // email
+    jTextField7.setText(""); // no of people
 }
 
     /**
@@ -225,6 +235,11 @@ private void loadEvents() {
 
         jButton4.setBackground(new java.awt.Color(0, 255, 255));
         jButton4.setText("Register");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -360,6 +375,46 @@ new LoginPage().setVisible(true); // open login page
     private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField7ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+
+    try {
+        String name = jTextField2.getText().trim();
+        String eventId = jTextField3.getText().trim();
+        String eventName = jTextField4.getText().trim();
+        String contact = jTextField5.getText().trim();
+        String email = jTextField6.getText().trim();
+        String peopleText = jTextField7.getText().trim();
+
+        if (name.isEmpty() || eventId.isEmpty() || eventName.isEmpty()
+                || contact.isEmpty() || email.isEmpty() || peopleText.isEmpty()) {
+
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Please fill all fields");
+            return;
+        }
+
+        int noOfPeople = Integer.parseInt(peopleText);
+
+        Registration reg = new Registration(
+                name, eventId, eventName, contact, email, noOfPeople
+        );
+
+        Model.RegistrationData.registrationList.add(reg);
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Registration Successful!");
+
+        clearRegisterFields();
+
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "No of People must be a number");
+    }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
