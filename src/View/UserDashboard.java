@@ -8,6 +8,7 @@ import Model.Event;
 import Model.Registration;
 import java.awt.CardLayout;
 import javax.swing.table.DefaultTableModel;
+import Controller.RegistrationController;
 
 /**
  *
@@ -40,7 +41,7 @@ private void loadEvents() {
     }
 }
 
-private void clearRegisterFields() {
+private void clearFields() {
     jTextField2.setText(""); // name
     jTextField3.setText(""); // event id
     jTextField4.setText(""); // event name
@@ -378,42 +379,18 @@ new LoginPage().setVisible(true); // open login page
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
 
+    boolean success = RegistrationController.registerUser(
+            jTextField2.getText(), // Name
+            jTextField3.getText(), // Event ID
+            jTextField4.getText(), // Event Name
+            jTextField5.getText(), // Contact
+            jTextField6.getText(), // Email
+            jTextField7.getText()  // No of People
+    );
 
-    try {
-        String name = jTextField2.getText().trim();
-        String eventId = jTextField3.getText().trim();
-        String eventName = jTextField4.getText().trim();
-        String contact = jTextField5.getText().trim();
-        String email = jTextField6.getText().trim();
-        String peopleText = jTextField7.getText().trim();
-
-        if (name.isEmpty() || eventId.isEmpty() || eventName.isEmpty()
-                || contact.isEmpty() || email.isEmpty() || peopleText.isEmpty()) {
-
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please fill all fields");
-            return;
-        }
-
-        int noOfPeople = Integer.parseInt(peopleText);
-
-        Registration reg = new Registration(
-                name, eventId, eventName, contact, email, noOfPeople
-        );
-
-        Model.RegistrationData.registrationList.add(reg);
-
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "Registration Successful!");
-
-        clearRegisterFields();
-
-    } catch (NumberFormatException e) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "No of People must be a number");
+    if (success) {
+        clearFields();
     }
-
-        // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
