@@ -1,8 +1,6 @@
 package Controller;
 
-import Model.Registration;
-import Model.RegistrationData;
-
+import Model.*;
 import javax.swing.JOptionPane;
 
 public class RegistrationController {
@@ -13,43 +11,75 @@ public class RegistrationController {
             String eventName,
             String contact,
             String email,
-            String noOfPeopleStr
-    ) {
-        // Validation
-        if (name.isEmpty() || eventId.isEmpty() || eventName.isEmpty()
-                || contact.isEmpty() || email.isEmpty() || noOfPeopleStr.isEmpty()) {
+            String noOfPeople) {
 
-            JOptionPane.showMessageDialog(null,
-                    "Please fill all fields",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+        if (name.isEmpty() || eventId.isEmpty() || eventName.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill all required fields");
             return false;
         }
 
-        int noOfPeople;
-        try {
-            noOfPeople = Integer.parseInt(noOfPeopleStr);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null,
-                    "No of People must be a number",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+        // ✅ AUTO-GENERATE REG ID
+        String regId = RegistrationData.generateRegId();
 
-        // Create model object
         Registration reg = new Registration(
-                name, eventId, eventName, contact, email, noOfPeople
+                regId,
+                name,
+                eventId,
+                eventName,
+                contact,
+                email,
+                noOfPeople
         );
 
-        // Store data in model
         RegistrationData.registrationList.add(reg);
 
-        JOptionPane.showMessageDialog(null,
-                "Registration Successful!",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+                null,
+                "Registration Successful!\nRegistration ID: " + regId
+        );
 
         return true;
+    }
+    
+    // Accept registration using Queue
+    public static boolean acceptRegistration(String regId) {
+        for (Registration r : RegistrationData.registrationList) {
+            if (r.getRegId().equals(regId)) {
+
+                // Add to queue
+                RegistrationData.registrationQueue.add(r);
+
+                // Remove from main list after accepting
+                RegistrationData.registrationList.remove(r);
+
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Delete registration and push to Stack
+    public static boolean deleteRegistration(String regId) {
+        for (Registration r : RegistrationData.registrationList) {
+            if (r.getRegId().equals(regId)) {
+
+                // Push to stack before deleting
+                RegistrationData.deletedStack.push(r);
+
+                RegistrationData.registrationList.remove(r);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Undo last deleted registration
+    public static boolean undoDelete() {
+        if (!RegistrationData.deletedStack.isEmpty()) {
+            Registration lastDeleted = RegistrationData.deletedStack.pop();
+            RegistrationData.registrationList.add(lastDeleted);
+            return true;
+        }
+        return false;
     }
 }
