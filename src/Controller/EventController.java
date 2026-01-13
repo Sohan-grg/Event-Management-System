@@ -186,6 +186,42 @@ public class EventController {
             list.set(j + 1, key);
         }
     }
+    
+    public static int getTotalEvents() {
+    return EventData.eventList.size();
+}
+
+
+
+public static int getUpcomingEvents() {
+    int count = 0;
+    LocalDate today = LocalDate.now();
+
+    for (Event e : EventData.eventList) {
+        LocalDate eventDate =
+                LocalDate.parse(e.getDate().trim(), FORMATTER);
+
+        if (eventDate.isAfter(today) || eventDate.isEqual(today)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+public static int getPastEvents() {
+    int count = 0;
+    LocalDate today = LocalDate.now();
+
+    for (Event e : EventData.eventList) {
+        LocalDate eventDate =
+                LocalDate.parse(e.getDate().trim(), FORMATTER);
+
+        if (eventDate.isBefore(today)) {
+            count++;
+        }
+    }
+    return count;
+}
 
     
 }

@@ -82,4 +82,35 @@ public class RegistrationController {
         }
         return false;
     }
+    
+    public static int getTotalRegistrations() {
+    return RegistrationData.registrationList.size();
+}
+public static String getMostPopularEvent() {
+
+    if (RegistrationData.registrationList.isEmpty()) {
+        return "N/A";
+    }
+
+    String popularEvent = "";
+    int maxCount = 0;
+
+    for (Event e : EventData.eventList) {
+        int count = 0;
+
+        for (Registration r : RegistrationData.registrationList) {
+            if (r.getEventId().equals(e.getId())) {
+                count++;
+            }
+        }
+
+        if (count > maxCount) {
+            maxCount = count;
+            popularEvent = e.getName();
+        }
+    }
+
+    return popularEvent + " (" + maxCount + " registrations)";
+}
+
 }
