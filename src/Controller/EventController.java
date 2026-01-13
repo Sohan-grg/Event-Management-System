@@ -21,15 +21,55 @@ public class EventController {
     }
 
     // SEARCH EVENT (by ID or Name)
-    public static Event searchEvent(String keyword) {
-        for (Event e : EventData.eventList) {
-            if (e.getId().equalsIgnoreCase(keyword) ||
-                e.getName().equalsIgnoreCase(keyword)) {
-                return e;
-            }
+    public static ArrayList<Event> linearSearchMultiField(String keyword) {
+
+    ArrayList<Event> results = new ArrayList<>();
+    keyword = keyword.toLowerCase().trim();
+
+    for (Event e : EventData.eventList) {
+
+        String title = e.getName().toLowerCase();      // Event title
+        String location = e.getLocation().toLowerCase(); // Author equivalent
+        String year = e.getDate().substring(6, 10);   // yyyy from dd-MM-yyyy
+
+        if (title.contains(keyword) ||
+            location.contains(keyword) ||
+            year.contains(keyword)) {
+
+            results.add(e);
         }
-        return null;
     }
+
+    return results;
+}
+
+    
+    public static Event binarySearchById(String searchId) {
+
+    // Ensure list is sorted before binary search
+    selectionSortById();
+
+    int low = 0;
+    int high = EventData.eventList.size() - 1;
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        Event midEvent = EventData.eventList.get(mid);
+
+        int compare = midEvent.getId().compareTo(searchId);
+
+        if (compare == 0) {
+            return midEvent; // Found
+        } else if (compare < 0) {
+            low = mid + 1;   // Search right
+        } else {
+            high = mid - 1;  // Search left
+        }
+    }
+
+    return null; // Not found
+}
+
 
     // UPDATE EVENT
     public static boolean updateEvent(String id, String name, String location,
