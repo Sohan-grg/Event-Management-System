@@ -4,42 +4,78 @@ import Model.*;
 import javax.swing.JOptionPane;
 
 public class RegistrationController {
-
+ 
     public static boolean registerUser(
-            String name,
-            String eventId,
-            String eventName,
-            String contact,
-            String email,
-            String noOfPeople) {
+        String name,
+        String eventId,
+        String eventName,
+        String contact,
+        String email,
+        String noOfPeople) {
 
-        if (name.isEmpty() || eventId.isEmpty() || eventName.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please fill all required fields");
-            return false;
-        }
+    // Basic validation
+    if (name.isEmpty() || eventId.isEmpty() || eventName.isEmpty()
+            || contact.isEmpty() || email.isEmpty() || noOfPeople.isEmpty()) {
 
-        // ✅ AUTO-GENERATE REG ID
-        String regId = RegistrationData.generateRegId();
+        JOptionPane.showMessageDialog(null, "Please fill all required fields");
+        return false;
+    }
 
-        Registration reg = new Registration(
-                regId,
-                name,
-                eventId,
-                eventName,
-                contact,
-                email,
-                noOfPeople
-        );
+    // 🔍 Validate Event ID
+    Event event = findEventById(eventId);
 
-        RegistrationData.registrationList.add(reg);
-
+    if (event == null) {
         JOptionPane.showMessageDialog(
                 null,
-                "Registration Successful!\nRegistration ID: " + regId
+                "Invalid Event ID. This event does not exist."
         );
-
-        return true;
+        return false;
     }
+
+    // 🔍 Validate Event Name matches Event ID
+    if (!event.getName().equalsIgnoreCase(eventName)) {
+        JOptionPane.showMessageDialog(
+                null,
+                "Event name does not match the selected Event ID."
+        );
+        return false;
+    }
+
+    // ✅ AUTO-GENERATE REG ID
+    String regId = RegistrationData.generateRegId();
+
+    Registration reg = new Registration(
+            regId,
+            name,
+            eventId,
+            eventName,
+            contact,
+            email,
+            noOfPeople
+    );
+
+    RegistrationData.registrationList.add(reg);
+
+    JOptionPane.showMessageDialog(
+            null,
+            "Registration Successful!\nRegistration ID: " + regId
+    );
+
+    return true;
+}
+
+    
+
+       
+    
+    private static Event findEventById(String eventId) {
+    for (Event e : Model.EventData.eventList) {
+        if (e.getId().equals(eventId)) {
+            return e;
+        }
+    }
+    return null;
+}
     
     // Accept registration using Queue
     public static boolean acceptRegistration(String regId) {
@@ -85,32 +121,6 @@ public class RegistrationController {
     
     public static int getTotalRegistrations() {
     return RegistrationData.registrationList.size();
-}
-public static String getMostPopularEvent() {
-
-    if (RegistrationData.registrationList.isEmpty()) {
-        return "N/A";
-    }
-
-    String popularEvent = "";
-    int maxCount = 0;
-
-    for (Event e : EventData.eventList) {
-        int count = 0;
-
-        for (Registration r : RegistrationData.registrationList) {
-            if (r.getEventId().equals(e.getId())) {
-                count++;
-            }
-        }
-
-        if (count > maxCount) {
-            maxCount = count;
-            popularEvent = e.getName();
-        }
-    }
-
-    return popularEvent + " (" + maxCount + " registrations)";
 }
 
 }

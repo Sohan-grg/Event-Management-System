@@ -18,6 +18,6 @@ public class RegistrationData {
     private static int regCounter = 1;   // ✅ ID counter
 
     public static String generateRegId() {
-        return "REG-" + regCounter++;
+        return " " + regCounter++;
     }
 }
