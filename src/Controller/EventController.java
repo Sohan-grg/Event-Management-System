@@ -28,9 +28,9 @@ public class EventController {
 
     for (Event e : EventData.eventList) {
 
-        String title = e.getName().toLowerCase();      // Event title
-        String location = e.getLocation().toLowerCase(); // Author equivalent
-        String year = e.getDate().substring(6, 10);   // yyyy from dd-MM-yyyy
+        String title = e.getName().toLowerCase();      
+        String location = e.getLocation().toLowerCase(); 
+        String year = e.getDate().substring(6, 10);   
 
         if (title.contains(keyword) ||
             location.contains(keyword) ||

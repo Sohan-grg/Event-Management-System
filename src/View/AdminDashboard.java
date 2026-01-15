@@ -908,8 +908,6 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-  
-
     String keyword = jTextField1.getText().trim();
 
     if (keyword.isEmpty()) {
@@ -938,11 +936,7 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
             e.getDate(),
             e.getDeadline()
         });
-    }
-
-
-
-                                
+    }                            
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -1069,7 +1063,7 @@ Controller.EventController.insertionSortByName();
     } else {
         JOptionPane.showMessageDialog(this, "Event not found");
     }
-     // TODO add your handling code here:
+
     }//GEN-LAST:event_jButton16ActionPerformed
 
     private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed

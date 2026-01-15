@@ -20,6 +20,48 @@ public class RegistrationController {
         JOptionPane.showMessageDialog(null, "Please fill all required fields");
         return false;
     }
+    
+    // Validate number of people
+int peopleCount;
+
+try {
+    peopleCount = Integer.parseInt(noOfPeople);
+
+    if (peopleCount <= 0) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Number of people must be greater than 0"
+        );
+        return false;
+    }
+
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(
+        null,
+        "Number of people must be a valid number"
+    );
+    return false;
+}
+
+// Validate email format
+if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+    JOptionPane.showMessageDialog(
+        null,
+        "Invalid email format (e.g. user@example.com)"
+    );
+    return false;
+}
+
+
+// Validate contact number
+if (!contact.matches("\\d{10}")) {
+    JOptionPane.showMessageDialog(
+        null,
+        "Contact number must contain 10 digits only"
+    );
+    return false;
+}
+
 
     // 🔍 Validate Event ID
     Event event = findEventById(eventId);
