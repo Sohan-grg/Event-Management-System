@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import Model.Event;
 import Model.EventData;
+import Model.Registration;
+import Model.RegistrationData;
 import javax.swing.JOptionPane;
 
 
@@ -51,21 +53,32 @@ public class AdminDashboard extends javax.swing.JFrame {
     
     private void loadParticipants() {
 
-    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-    model.setRowCount(0); // clear table
+    DefaultTableModel model =
+            (DefaultTableModel) jTable2.getModel();
 
-    for (Model.Registration r : Model.RegistrationData.registrationList) {
-        model.addRow(new Object[]{
-            r.getRegId(),
-            r.getName(),
-            r.getEventId(),
-            r.getEventName(),
-            r.getContact(),
-            r.getEmail(),
-            r.getNoOfPeople()
-        });
+    model.setRowCount(0);
+
+    if (RegistrationData.front == -1) return;
+
+    for (int i = RegistrationData.front;
+         i <= RegistrationData.rear; i++) {
+
+        Registration r = RegistrationData.queue[i];
+
+        if (r != null) {
+            model.addRow(new Object[]{
+                r.getRegId(),
+                r.getName(),
+                r.getEventId(),
+                r.getEventName(),
+                r.getContact(),
+                r.getEmail(),
+                r.getNoOfPeople()
+            });
+        }
     }
 }
+
 
 
     private void clearFields() {
@@ -971,20 +984,19 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     }//GEN-LAST:event_jTextField7ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-String regId = jTextField7.getText().trim();
+Registration r =
+        Controller.RegistrationController.acceptNextRegistration();
 
-    if (regId.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Enter Registration ID to accept");
+    if (r == null) {
+        JOptionPane.showMessageDialog(this, "No registrations in queue");
         return;
     }
 
-    if (Controller.RegistrationController.acceptRegistration(regId)) {
-        loadParticipants();
-        jTextField7.setText("");
-        JOptionPane.showMessageDialog(this, "Registration accepted successfully");
-    } else {
-        JOptionPane.showMessageDialog(this, "Registration not found");
-    }        // TODO add your handling code here:
+    JOptionPane.showMessageDialog(this,
+            "Accepted:\n" +
+            r.getName() + " - " + r.getEventName());
+
+    loadParticipants();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed

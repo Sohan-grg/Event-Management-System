@@ -20,7 +20,7 @@ public class EventController {
         return true;
     }
 
-    // SEARCH EVENT (by ID or Name)
+    // SEARCH EVENT 
     public static ArrayList<Event> linearSearchMultiField(String keyword) {
 
     ArrayList<Event> results = new ArrayList<>();

@@ -54,7 +54,19 @@ public class RegistrationController {
             noOfPeople
     );
 
-    RegistrationData.registrationList.add(reg);
+    // ENQUEUE (FIFO)
+if (RegistrationData.rear == RegistrationData.QUEUE_SIZE - 1) {
+    JOptionPane.showMessageDialog(null, "Registration queue is full");
+    return false;
+}
+
+if (RegistrationData.front == -1) {
+    RegistrationData.front = 0;
+}
+
+RegistrationData.rear++;
+RegistrationData.queue[RegistrationData.rear] = reg;
+
 
     JOptionPane.showMessageDialog(
             null,
@@ -77,22 +89,25 @@ public class RegistrationController {
     return null;
 }
     
-    // Accept registration using Queue
-    public static boolean acceptRegistration(String regId) {
-        for (Registration r : RegistrationData.registrationList) {
-            if (r.getRegId().equals(regId)) {
+ public static Registration acceptNextRegistration() {
 
-                // Add to queue
-                RegistrationData.registrationQueue.add(r);
-
-                // Remove from main list after accepting
-                RegistrationData.registrationList.remove(r);
-
-                return true;
-            }
-        }
-        return false;
+    if (RegistrationData.front == -1) {
+        return null;
     }
+
+    Registration accepted =
+            RegistrationData.queue[RegistrationData.front];
+
+    RegistrationData.queue[RegistrationData.front] = null;
+    RegistrationData.front++;
+
+    if (RegistrationData.front > RegistrationData.rear) {
+        RegistrationData.front = RegistrationData.rear = -1;
+    }
+
+    return accepted;
+}
+
     
     // Delete registration and push to Stack
     public static boolean deleteRegistration(String regId) {
