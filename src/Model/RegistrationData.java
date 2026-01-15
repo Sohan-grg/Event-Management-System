@@ -16,12 +16,12 @@ public class RegistrationData {
     public static int rear = -1;
 
     // ===== STACK =====
-    public static final int STACK_SIZE = 50;
-    public static Registration[] stack = new Registration[STACK_SIZE];
-    public static int top = -1;
+    public static final int STACK_MAX = 50;
+public static Registration[] deletedStackArr = new Registration[STACK_MAX];
+public static int top = -1;
+
     
-    // Stack for undo delete (LIFO)
-    public static Stack<Registration> deletedStack = new Stack<>();
+ 
 
     private static int regCounter = 1;
 

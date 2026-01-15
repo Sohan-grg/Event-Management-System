@@ -111,28 +111,77 @@ RegistrationData.queue[RegistrationData.rear] = reg;
     
     // Delete registration and push to Stack
     public static boolean deleteRegistration(String regId) {
-        for (Registration r : RegistrationData.registrationList) {
-            if (r.getRegId().equals(regId)) {
 
-                // Push to stack before deleting
-                RegistrationData.deletedStack.push(r);
-
-                RegistrationData.registrationList.remove(r);
-                return true;
-            }
-        }
+    // Check if queue is empty
+    if (RegistrationData.front == -1) {
+        JOptionPane.showMessageDialog(null, "No registrations to delete");
         return false;
     }
+
+    for (int i = RegistrationData.front; i <= RegistrationData.rear; i++) {
+
+        Registration r = RegistrationData.queue[i];
+
+        if (r != null && r.getRegId().equals(regId)) {
+
+            // STACK FULL CHECK
+            if (RegistrationData.top == RegistrationData.STACK_MAX - 1) {
+                JOptionPane.showMessageDialog(null, "Delete stack is full");
+                return false;
+            }
+
+            // PUSH TO STACK
+            RegistrationData.top++;
+            RegistrationData.deletedStackArr[RegistrationData.top] = r;
+
+            // REMOVE FROM QUEUE
+            for (int j = i; j < RegistrationData.rear; j++) {
+                RegistrationData.queue[j] = RegistrationData.queue[j + 1];
+            }
+
+            RegistrationData.queue[RegistrationData.rear] = null;
+            RegistrationData.rear--;
+
+            if (RegistrationData.rear < RegistrationData.front) {
+                RegistrationData.front = RegistrationData.rear = -1;
+            }
+
+            return true;
+        }
+    }
+    return false;
+}
+
     
     // Undo last deleted registration
     public static boolean undoDelete() {
-        if (!RegistrationData.deletedStack.isEmpty()) {
-            Registration lastDeleted = RegistrationData.deletedStack.pop();
-            RegistrationData.registrationList.add(lastDeleted);
-            return true;
-        }
+
+    if (RegistrationData.top == -1) {
+        JOptionPane.showMessageDialog(null, "No deleted registration to undo");
         return false;
     }
+
+    // POP FROM STACK
+    Registration r = RegistrationData.deletedStackArr[RegistrationData.top];
+    RegistrationData.deletedStackArr[RegistrationData.top] = null;
+    RegistrationData.top--;
+
+    // ENQUEUE BACK
+    if (RegistrationData.rear == RegistrationData.QUEUE_SIZE - 1) {
+        JOptionPane.showMessageDialog(null, "Queue full, cannot undo");
+        return false;
+    }
+
+    if (RegistrationData.front == -1) {
+        RegistrationData.front = 0;
+    }
+
+    RegistrationData.rear++;
+    RegistrationData.queue[RegistrationData.rear] = r;
+
+    return true;
+}
+
     
     public static int getTotalRegistrations() {
     return RegistrationData.registrationList.size();

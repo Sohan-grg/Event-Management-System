@@ -176,7 +176,6 @@ public class AdminDashboard extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         jButton12 = new javax.swing.JButton();
-        jTextField7 = new javax.swing.JTextField();
         jButton13 = new javax.swing.JButton();
         jTextField8 = new javax.swing.JTextField();
         jButton14 = new javax.swing.JButton();
@@ -703,12 +702,6 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
-            }
-        });
-
         jButton13.setBackground(new java.awt.Color(0, 255, 255));
         jButton13.setText("Delete");
         jButton13.addActionListener(new java.awt.event.ActionListener() {
@@ -734,20 +727,16 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addGap(48, 53, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton14)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                            .addComponent(jButton12)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton13)
-                            .addComponent(jButton12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                            .addComponent(jTextField8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton14))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addContainerGap(53, Short.MAX_VALUE)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(47, 47, 47))
         );
@@ -761,12 +750,10 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGap(45, 45, 45)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton12)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton14))
+                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton13))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton13)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButton14)
                 .addContainerGap(78, Short.MAX_VALUE))
         );
 
@@ -979,10 +966,6 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     }
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
-
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
 Registration r =
         Controller.RegistrationController.acceptNextRegistration();
@@ -1000,29 +983,42 @@ Registration r =
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-String regId = jTextField8.getText().trim();
+String regId = jTextField8.getText().trim(); // Delete Reg ID field
 
     if (regId.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Enter Registration ID to delete");
         return;
     }
 
-    if (Controller.RegistrationController.deleteRegistration(regId)) {
-        loadParticipants();
+    boolean deleted = Controller.RegistrationController.deleteRegistration(regId);
+
+    if (deleted) {
+        loadParticipants();   // refresh table
         jTextField8.setText("");
-        JOptionPane.showMessageDialog(this, "Registration deleted (Undo available)");
+        JOptionPane.showMessageDialog(
+            this,
+            "Registration deleted and pushed to stack (Undo available)"
+        );
     } else {
         JOptionPane.showMessageDialog(this, "Registration not found");
-    }        // TODO add your handling code here:
+    }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-if (Controller.RegistrationController.undoDelete()) {
-        loadParticipants();
-        JOptionPane.showMessageDialog(this, "Last deleted registration restored");
+boolean undone = Controller.RegistrationController.undoDelete();
+
+    if (undone) {
+        loadParticipants();   // refresh table
+        JOptionPane.showMessageDialog(
+            this,
+            "Last deleted registration restored (Stack Pop)"
+        );
     } else {
-        JOptionPane.showMessageDialog(this, "No deleted registration to undo");
-    }        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(
+            this,
+            "No deleted registration to undo"
+        );
+    }
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1157,7 +1153,6 @@ Controller.EventController.insertionSortByName();
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel lblPast;
