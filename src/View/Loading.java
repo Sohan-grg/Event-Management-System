@@ -70,7 +70,7 @@ public class Loading extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel1.setText("Loading...");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("/Users/sohangurung/Documents/DSA COURSEWORK/event.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/event.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
