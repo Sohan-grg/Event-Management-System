@@ -28,7 +28,7 @@ public class AdminDashboard extends javax.swing.JFrame {
      * Creates new form AdminDashboard
      */
     public AdminDashboard() {
-        initComponents();
+        initComponents();// Initializes Swing components
         loadDashboardStats();
         loadEvents();
         loadParticipants();
@@ -38,6 +38,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0);
 
+    // Loop through all events and add them to the table
     for (Event e : EventData.eventList) {
         model.addRow(new Object[]{
             e.getId(),
@@ -58,6 +59,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     model.setRowCount(0);
 
+    // If queue is empty, exit the method
     if (RegistrationData.front == -1) return;
 
     for (int i = RegistrationData.front;
@@ -65,6 +67,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         Registration r = RegistrationData.queue[i];
 
+        // Add only non-null registrations to the table
         if (r != null) {
             model.addRow(new Object[]{
                 r.getRegId(),
@@ -92,22 +95,22 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void loadDashboardStats() {
 
+        // Display total number of events
     lblTotalEvents.setText(
         String.valueOf(EventController.getTotalEvents())
     );
 
+    // Display total number of registrations
     lblTotalRegistrations.setText(
         String.valueOf(Controller.RegistrationController.getTotalRegistrations())
     );
 
+    // Display number of upcoming events
     lblUpcoming.setText(
         String.valueOf(EventController.getUpcomingEvents())
     );
-    
-    lblPast.setText(
-        String.valueOf(EventController.getUpcomingEvents())
-    );
 
+// Display number of past events
     lblPast.setText(
         String.valueOf(EventController.getPastEvents())
     );
@@ -842,20 +845,25 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-                                         
+    // Retrieve user input values from text fields                                     
     String id = jTextField2.getText();
     String name = jTextField3.getText();
     String location = jTextField4.getText();
     String date = jFormattedTextField1.getText().trim();
     String deadline = jFormattedTextField2.getText().trim();
 
+    // Validate that none of the required fields are empty
     if (id.isEmpty() || name.isEmpty() || location.isEmpty() || date.isEmpty() || deadline.isEmpty()) {
+        
+        // Show error message if any field is missing
         JOptionPane.showMessageDialog(this, "Please fill all fields");
-        return;
+        return;// Stop execution if validation fails
     }
 
+    // Create a new Event object using the provided input values
     Event event = new Event(id, name, location, date, deadline);
 
+    // Attempt to add the event using the controller
     if (EventController.addEvent(event)) {
         loadEvents();
         loadDashboardStats();
@@ -865,6 +873,8 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
         JOptionPane.showMessageDialog(this, "Event ID already exists!");
     }
 
+    // Validate date format for formatted text fields
+// Underscore (_) indicates incomplete date input
  if (date.contains("_") || deadline.contains("_")) {
         JOptionPane.showMessageDialog(this,
             "Enter dates in dd-MM-yyyy format");
@@ -1016,7 +1026,7 @@ boolean undone = Controller.RegistrationController.undoDelete();
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
 Controller.EventController.selectionSortById();
     loadEvents();
-    JOptionPane.showMessageDialog(this, "Events sorted by ID (Selection Sort)");        // TODO add your handling code here:
+    JOptionPane.showMessageDialog(this, "Events sorted by ID (Selection Sort)");        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
@@ -1031,13 +1041,13 @@ Controller.EventController.selectionSortById();
 Controller.EventController.mergeSortByDate();
     loadEvents();
     JOptionPane.showMessageDialog(this,
-        "Events sorted by Date (dd-MM-yyyy)");        // TODO add your handling code here:
+        "Events sorted by Date (dd-MM-yyyy)");        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
 Controller.EventController.insertionSortByName();
     loadEvents();
-    JOptionPane.showMessageDialog(this, "Events sorted by Name (Insertion Sort)");        // TODO add your handling code here:
+    JOptionPane.showMessageDialog(this, "Events sorted by Name (Insertion Sort)");       
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
