@@ -896,6 +896,8 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
         return;
     }
 
+    // Attempt to update the event details using the controller
+// The controller searches for the event by ID and updates its values
     boolean updated = EventController.updateEvent(
         id,
         jTextField3.getText(),
@@ -904,6 +906,7 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
         jFormattedTextField2.getText()
     );
 
+    // Check if the event update was successful
     if (updated) {
         loadEvents();
         loadDashboardStats();
@@ -925,6 +928,8 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
         return;
     }
 
+    // Perform linear search across multiple event fields
+// This searches by event title, location, or year
     ArrayList<Event> results =
             EventController.linearSearchMultiField(keyword);
 
@@ -933,11 +938,13 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
         return;
     }
 
+    // Get table model and clear existing rows
     DefaultTableModel model =
             (DefaultTableModel) jTable1.getModel();
 
     model.setRowCount(0); // clear table
 
+    // Populate table with matching search results
     for (Event e : results) {
         model.addRow(new Object[]{
             e.getId(),
@@ -953,11 +960,14 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
                                          
     String id = jTextField2.getText().trim();
 
+    // Validate that the Event ID field is not empty
     if (id.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Enter Event ID to delete");
         return;
     }
 
+    // Attempt to delete the event using the controller
+// The controller searches for the event by ID and removes it
     if (EventController.deleteEvent(id)) {
         loadEvents();
         loadDashboardStats();
@@ -969,9 +979,11 @@ CardLayout cl = (CardLayout) jPanel3.getLayout();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-Registration r =
+// Accept the next registration from the queue (FIFO order)
+        Registration r =
         Controller.RegistrationController.acceptNextRegistration();
 
+    // If the queue is empty, no registration can be accepted
     if (r == null) {
         JOptionPane.showMessageDialog(this, "No registrations in queue");
         return;
@@ -1051,7 +1063,7 @@ Controller.EventController.insertionSortByName();
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-
+// Retrieve Event ID entered for binary search
         String searchId = jTextField9.getText().trim();
 
     if (searchId.isEmpty()) {
@@ -1059,9 +1071,13 @@ Controller.EventController.insertionSortByName();
         return;
     }
 
+    // Perform binary search to find the event by ID
+// Binary search is efficient and works on sorted data
     Event event = EventController.binarySearchById(searchId);
 
+    // Check if the event was found
     if (event != null) {
+        // Display detailed event information if found
         JOptionPane.showMessageDialog(this,
             "Event Found (Binary Search)\n\n"
             + "ID: " + event.getId() + "\n"
